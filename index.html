@@ -34,9 +34,32 @@
       padding: 15px;
       display: flex;
       flex-direction: column;
+      position: relative;
     }
     
+    .graffiti-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.1;
+    }
+
+    .graffiti-text {
+      position: absolute;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      transform-origin: center;
+      text-shadow: 0 0 10px rgba(124, 101, 193, 0.3);
+    }
+
     .app-container {
+      position: relative;
+      z-index: 1;
       max-width: 424px;
       max-height: 695px;
       margin: 0 auto;
@@ -50,6 +73,27 @@
       overflow: hidden;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .graffiti-corners {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .graffiti-draw {
+      position: absolute;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      opacity: 0.13;
+      text-shadow: 0 0 10px #7c65c1;
+      user-select: none;
+      pointer-events: none;
+      white-space: nowrap;
     }
     
     .header {
@@ -70,10 +114,38 @@
     }
     
     .app-title span {
-      background: linear-gradient(90deg, var(--farcaster-purple), var(--accent-yellow));
+      background: linear-gradient(90deg, var(--farcaster-purple), var(--accent-yellow), var(--farcaster-purple));
+      background-size: 200% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      animation: gradientFlow 3s linear infinite;
+    }
+
+    .app-title svg {
+      animation: gradientFlow 3s linear infinite;
+    }
+
+    .app-title svg path {
+      stroke: url(#gradient);
+    }
+
+    @keyframes gradientFlow {
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 200% 50%;
+      }
+    }
+
+    @keyframes gradientMove {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
     }
     
     .user-info {
@@ -113,6 +185,151 @@
     .leaderboard-btn:hover {
       background: var(--farcaster-light-purple);
       transform: translateY(-2px);
+    }
+    
+    .music-control {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .music-control:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: scale(1.05);
+    }
+    
+    .music-control.playing {
+      background: #1a1a2e;
+      color: transparent;
+    }
+
+    .music-control.playing::before {
+      content: '🐱';
+      position: absolute;
+      font-size: 20px;
+      animation: nyanCat 0.8s steps(4) infinite;
+      transform-origin: center;
+      z-index: 2;
+    }
+
+    .music-control.playing::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        linear-gradient(90deg, 
+          #ff0000 0%, #ff0000 14.28%,
+          #ff7f00 14.28%, #ff7f00 28.57%,
+          #ffff00 28.57%, #ffff00 42.85%,
+          #00ff00 42.85%, #00ff00 57.14%,
+          #0000ff 57.14%, #0000ff 71.42%,
+          #4b0082 71.42%, #4b0082 85.71%,
+          #9400d3 85.71%, #9400d3 100%
+        );
+      background-size: 200% 100%;
+      animation: rainbowMove 1s linear infinite;
+      z-index: 1;
+      opacity: 0.8;
+      filter: brightness(1.2);
+    }
+
+    .music-control.playing .rainbow-trail {
+      position: absolute;
+      top: 50%;
+      left: -150%;
+      width: 300%;
+      height: 4px;
+      background: 
+        linear-gradient(90deg, 
+          #ff0000 0%, #ff0000 14.28%,
+          #ff7f00 14.28%, #ff7f00 28.57%,
+          #ffff00 28.57%, #ffff00 42.85%,
+          #00ff00 42.85%, #00ff00 57.14%,
+          #0000ff 57.14%, #0000ff 71.42%,
+          #4b0082 71.42%, #4b0082 85.71%,
+          #9400d3 85.71%, #9400d3 100%
+        );
+      background-size: 200% 100%;
+      animation: rainbowMove 1s linear infinite;
+      transform: translateY(-50%);
+      filter: brightness(1.2) blur(1px);
+      z-index: 0;
+    }
+
+    @keyframes nyanCat {
+      0% { 
+        transform: translateX(-2px) rotate(-5deg);
+        filter: brightness(1.2) drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+      }
+      25% { 
+        transform: translateX(0px) rotate(0deg);
+        filter: brightness(1) drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+      }
+      50% { 
+        transform: translateX(2px) rotate(5deg);
+        filter: brightness(1.2) drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+      }
+      75% { 
+        transform: translateX(0px) rotate(0deg);
+        filter: brightness(1) drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+      }
+      100% { 
+        transform: translateX(-2px) rotate(-5deg);
+        filter: brightness(1.2) drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+      }
+    }
+
+    @keyframes rainbowMove {
+      0% {
+        background-position: 0% 50%;
+        filter: hue-rotate(0deg);
+      }
+      100% {
+        background-position: 200% 50%;
+        filter: hue-rotate(360deg);
+      }
+    }
+
+    /* Обновленные звезды */
+    .music-control.playing .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(1px 1px at 25% 25%, white 100%, transparent 100%),
+        radial-gradient(1px 1px at 50% 50%, white 100%, transparent 100%),
+        radial-gradient(1px 1px at 75% 75%, white 100%, transparent 100%),
+        radial-gradient(1px 1px at 15% 85%, white 100%, transparent 100%),
+        radial-gradient(1px 1px at 85% 15%, white 100%, transparent 100%);
+      background-size: 36px 36px;
+      animation: twinkle 0.8s steps(2) infinite;
+      filter: brightness(1.2);
+      z-index: 1;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { 
+        opacity: 0.3;
+        transform: scale(0.8);
+      }
+      50% { 
+        opacity: 0.8;
+        transform: scale(1.2);
+      }
     }
     
     .content {
@@ -159,11 +376,14 @@
     }
     
     .controls {
+      position: relative;
+      z-index: 1;
       display: flex;
       justify-content: space-between;
       margin-bottom: 10px;
       gap: 10px;
       margin-top: 10px;
+      align-items: center;
     }
     
     .zoom-controls {
@@ -172,9 +392,11 @@
       background: rgba(255, 255, 255, 0.1);
       padding: 6px;
       border-radius: 30px;
+      align-items: center;
+      margin: 0 auto;
     }
     
-    .zoom-btn {
+    .control-btn {
       width: 36px;
       height: 36px;
       border-radius: 50%;
@@ -186,14 +408,61 @@
       font-size: 18px;
       cursor: pointer;
       transition: all 0.2s ease;
+      border: none;
     }
     
-    .zoom-btn:hover {
+    .control-btn:hover {
       background: rgba(255, 255, 255, 0.25);
       transform: scale(1.05);
     }
+
+    .action-btn {
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      position: relative;
+      overflow: hidden;
+      width: 110px;
+      height: 36px;
+      white-space: nowrap;
+      box-shadow: 0 4px 20px rgba(124, 101, 193, 0.4);
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(124, 101, 193, 0.6);
+    }
+
+    .action-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .action-btn.share {
+      background: linear-gradient(90deg, var(--farcaster-purple), var(--accent-yellow), var(--farcaster-purple));
+      background-size: 200% 100%;
+      animation: gradientFlow 3s linear infinite;
+    }
+
+    .action-btn.add-app {
+      background: linear-gradient(90deg, var(--farcaster-purple), var(--accent-yellow), var(--farcaster-purple));
+      background-size: 200% 100%;
+      animation: gradientFlow 3s linear infinite;
+    }
     
     .color-palette {
+      position: relative;
+      z-index: 1;
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
@@ -223,6 +492,8 @@
     }
     
     .draw-section {
+      position: relative;
+      z-index: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -247,7 +518,8 @@
     }
     
     .draw-btn {
-      background: linear-gradient(90deg, var(--farcaster-purple), var(--accent-yellow));
+      background: linear-gradient(90deg, var(--farcaster-purple), var(--accent-yellow), var(--farcaster-purple));
+      background-size: 200% 100%;
       color: var(--text-dark);
       border: none;
       padding: 12px 30px;
@@ -263,6 +535,7 @@
       justify-content: center;
       align-items: center;
       gap: 8px;
+      animation: gradientFlow 3s linear infinite;
     }
     
     .draw-btn:hover {
@@ -443,13 +716,34 @@
   </style>
 </head>
 <body>
+  <div class="graffiti-background" id="graffitiBackground"></div>
+  <!-- Добавляем аудио элемент -->
+  <audio id="backgroundMusic" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.ogg" type="audio/ogg">
+    Ваш браузер не поддерживает аудио элемент.
+  </audio>
+
   <div class="app-container">
     <div class="header">
       <div class="app-title">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#7c65c1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M2 17L12 22L22 17" stroke="#7c65c1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M2 12L12 17L22 12" stroke="#7c65c1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" style="stop-color: var(--farcaster-purple)">
+                <animate attributeName="offset" values="0;1;0" dur="3s" repeatCount="indefinite"/>
+              </stop>
+              <stop offset="50%" style="stop-color: var(--accent-yellow)">
+                <animate attributeName="offset" values="0.5;1.5;0.5" dur="3s" repeatCount="indefinite"/>
+              </stop>
+              <stop offset="100%" style="stop-color: var(--farcaster-purple)">
+                <animate attributeName="offset" values="1;2;1" dur="3s" repeatCount="indefinite"/>
+              </stop>
+            </linearGradient>
+          </defs>
+          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 17L12 22L22 17" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 12L12 17L22 12" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         <span>Drawcaster</span>
       </div>
@@ -470,10 +764,13 @@
       </div>
       
       <div class="controls">
+        <button class="action-btn add-app" title="Добавить мини-приложение">ADD ME!</button>
         <div class="zoom-controls">
-          <div class="zoom-btn" id="zoomOut">−</div>
-          <div class="zoom-btn" id="zoomIn">+</div>
+          <div class="control-btn" id="zoomOut">−</div>
+          <div class="control-btn" id="zoomIn">+</div>
+          <button class="control-btn music-control" id="musicControl" title="Включить/выключить музыку">♪</button>
         </div>
+        <button class="action-btn share" title="Поделиться">SHARE ME!</button>
       </div>
       
       <div class="color-palette" id="colorPalette">
@@ -515,6 +812,93 @@
   </div>
 
   <script>
+    // Добавляем функцию для управления музыкой
+    function setupMusicControl() {
+      const music = document.getElementById('backgroundMusic');
+      const musicControl = document.getElementById('musicControl');
+      let isPlaying = false;
+      let hasInteracted = false;
+
+      // Функция для запуска музыки
+      function startMusic() {
+        if (!hasInteracted) return; // Не запускаем музыку до первого взаимодействия
+        
+        music.volume = 0.5;
+        const playPromise = music.play();
+        
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            musicControl.classList.add('playing');
+            isPlaying = true;
+            // Добавляем элементы для анимации
+            const rainbowTrail = document.createElement('div');
+            rainbowTrail.className = 'rainbow-trail';
+            const stars = document.createElement('div');
+            stars.className = 'stars';
+            musicControl.appendChild(rainbowTrail);
+            musicControl.appendChild(stars);
+          }).catch(error => {
+            console.log("Ошибка воспроизведения:", error);
+            // Пробуем запустить снова после взаимодействия пользователя
+            document.addEventListener('click', function tryPlayAgain() {
+              music.play().then(() => {
+                musicControl.classList.add('playing');
+                isPlaying = true;
+                // Добавляем элементы для анимации
+                const rainbowTrail = document.createElement('div');
+                rainbowTrail.className = 'rainbow-trail';
+                const stars = document.createElement('div');
+                stars.className = 'stars';
+                musicControl.appendChild(rainbowTrail);
+                musicControl.appendChild(stars);
+                document.removeEventListener('click', tryPlayAgain);
+              });
+            }, { once: true });
+          });
+        }
+      }
+
+      // Обработчик первого взаимодействия
+      function handleFirstInteraction() {
+        hasInteracted = true;
+        startMusic();
+        // Удаляем обработчики после первого взаимодействия
+        document.removeEventListener('click', handleFirstInteraction);
+        document.removeEventListener('touchstart', handleFirstInteraction);
+      }
+
+      // Добавляем обработчики для первого взаимодействия
+      document.addEventListener('click', handleFirstInteraction);
+      document.addEventListener('touchstart', handleFirstInteraction);
+
+      musicControl.addEventListener('click', (e) => {
+        e.stopPropagation(); // Предотвращаем всплытие события
+        hasInteracted = true;
+        
+        if (isPlaying) {
+          music.pause();
+          musicControl.classList.remove('playing');
+          isPlaying = false;
+          // Удаляем элементы анимации
+          const rainbowTrail = musicControl.querySelector('.rainbow-trail');
+          const stars = musicControl.querySelector('.stars');
+          if (rainbowTrail) rainbowTrail.remove();
+          if (stars) stars.remove();
+        } else {
+          startMusic();
+        }
+      });
+
+      // Обработка потери фокуса
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden && isPlaying) {
+          music.pause();
+        } else if (!document.hidden && isPlaying) {
+          music.play();
+        }
+      });
+    }
+
     // Конфигурация
     const GRID_SIZE = 200; // 200x200 пикселей
     let boardSize = 1; // размер canvas (px), всегда квадрат
@@ -668,6 +1052,8 @@
         
         if (color === selectedColor) {
           colorEl.classList.add('selected');
+          // Обновляем цвет кнопки музыки при инициализации
+          updateMusicButtonColor(color);
         }
         
         colorEl.addEventListener('click', () => {
@@ -676,10 +1062,31 @@
           });
           colorEl.classList.add('selected');
           selectedColor = color;
+          // Обновляем цвет кнопки музыки при выборе нового цвета
+          updateMusicButtonColor(color);
         });
         
         palette.appendChild(colorEl);
       });
+    }
+
+    // Функция обновления цвета кнопки музыки
+    function updateMusicButtonColor(color) {
+      const musicControl = document.getElementById('musicControl');
+      if (!musicControl.classList.contains('playing')) {
+        musicControl.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+        musicControl.style.color = '#ffffff';
+      }
+    }
+
+    // Функция для конвертации HEX в RGB
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : null;
     }
     
     // Настраиваем обработчики событий
@@ -762,6 +1169,8 @@
     }
     // Выбор пикселя
     function selectPixel(e) {
+      if (isDragging) return; // Не выбираем пиксель если происходит перемещение
+      
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
       const scaleY = canvas.height / rect.height;
@@ -776,13 +1185,12 @@
       if (x >= 0 && x < GRID_SIZE && y >= 0 && y < GRID_SIZE) {
         selectedPixel = {x, y};
         document.getElementById('pixelCoords').textContent = `(${x}, ${y})`;
-
         drawGrid(ctx);
       }
     }
     // Выбор пикселя для касания
     function selectPixelTouch(e) {
-      if (e.touches.length === 1) {
+      if (e.touches.length === 1 && !isDragging) {
         selectPixel(e.touches[0]);
       }
     }
@@ -896,6 +1304,7 @@
       init();
       simulateUserAuth();
       generateLeaderboard();
+      setupMusicControl();
     });
 
     // Функции масштабирования
