@@ -1229,7 +1229,7 @@
     }
     // Выбор пикселя для касания
     function selectPixelTouch(e) {
-      if (e.touches.length === 1 && !isDragging) {
+      if (e.touches.length === 1) {
         selectPixel(e.touches[0]);
       }
     }
