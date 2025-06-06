@@ -27,14 +27,16 @@
     }
     
     body {
-      background: linear-gradient(135deg, var(--background-dark), var(--farcaster-dark-purple));
-      color: var(--text-light);
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      color: white;
+      background: linear-gradient(135deg, var(--background-dark), var(--farcaster-dark-purple)); /* Возвращаем оригинальный фон */
       height: 100vh;
-      overflow: hidden;
-      padding: 15px;
+      overflow: auto;
       display: flex;
-      flex-direction: column;
-      position: relative;
+      justify-content: center;
+      align-items: center;
     }
     
     .graffiti-background {
@@ -67,12 +69,14 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.05); /* Возвращаем полупрозрачный фон */
+      backdrop-filter: blur(10px); /* Возвращаем размытие фона */
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Возвращаем тень */
       border: 1px solid rgba(255, 255, 255, 0.1);
+      /* border-bottom: 5px solid var(--background-dark); */ /* Удаляем временную нижнюю границу */
+      /* box-shadow: inset 0 -10px 10px -5px var(--background-dark); */ /* Удаляем временную внутреннюю тень */
     }
     
     .graffiti-corners {
@@ -114,7 +118,7 @@
     }
     
     .app-title span {
-      background: linear-gradient(90deg, var(--farcaster-purple), var(--accent-yellow), var(--farcaster-purple));
+      background: linear-gradient(90deg, var(--farcaster-purple), white, var(--farcaster-purple));
       background-size: 200% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -123,11 +127,16 @@
     }
 
     .app-title svg {
-      animation: gradientFlow 3s linear infinite;
+      /* Keep this for general SVG styles if needed, like margin */
+      /* Removed any conflicting CSS styles */
+      background: var(--background-dark); /* Background color for the grid lines */
+      animation: none; /* Ensure no animation from CSS on the svg element itself */
     }
 
-    .app-title svg path {
-      stroke: url(#gradient);
+    .app-title svg path, .app-title svg rect {
+       /* Ensure fill is set by url(#gradient) in SVG */
+       /* Removed fill: none; */
+       stroke: none; /* Ensure no stroke is applied by CSS, gaps create the grid */
     }
 
     @keyframes gradientFlow {
@@ -335,6 +344,7 @@
     .content {
       flex: 1;
       padding: 15px;
+      padding-bottom: 25px;
       display: flex;
       flex-direction: column;
       overflow: auto;
@@ -379,11 +389,13 @@
       position: relative;
       z-index: 1;
       display: flex;
-      justify-content: space-between;
+      justify-content: space-between; /* Возвращаем space-between */
       margin-bottom: 10px;
-      gap: 10px;
+      gap: 10px; /* Расстояние между элементами */
       margin-top: 10px;
       align-items: center;
+      /* Убираем flex-wrap */
+      /* Убираем justify-content: center */
     }
     
     .zoom-controls {
@@ -393,7 +405,7 @@
       padding: 6px;
       border-radius: 30px;
       align-items: center;
-      margin: 0 auto;
+      /* margin: 0 auto; */ /* Удаляем автоматический margin */
     }
     
     .control-btn {
@@ -417,30 +429,33 @@
     }
 
     .action-btn {
-      padding: 8px 16px;
+      padding: 8px 10px;
       border-radius: 20px;
-      background: rgba(255, 255, 255, 0.15);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: linear-gradient(to right, var(--accent-purple), white);
+      color: var(--text-dark);
       font-size: 16px;
       font-weight: bold;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.3s ease;
       border: none;
-      position: relative;
-      overflow: hidden;
-      width: 110px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-align: center;
+      text-decoration: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* margin: 0 5px; */ /* Убираем margin */
+      /* flex-grow: 1; */ /* Убираем flex-grow */
+      /* flex-basis: 0; */ /* Убираем flex-basis */
+      width: auto; /* Ширина по содержимому или доступному месту */
+      flex-shrink: 1; /* Позволяем сжиматься */
+      max-width: 110px; /* Максимальная ширина */
       height: 36px;
       white-space: nowrap;
-      box-shadow: 0 4px 20px rgba(124, 101, 193, 0.4);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .action-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 25px rgba(124, 101, 193, 0.6);
     }
 
     .action-btn:active {
@@ -448,14 +463,24 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
+    .action-btn span {
+      background: linear-gradient(90deg, var(--farcaster-purple), white, var(--farcaster-purple));
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientFlow 3s linear infinite;
+      color: transparent;
+    }
+
     .action-btn.share {
-      background: linear-gradient(90deg, var(--farcaster-purple), var(--accent-yellow), var(--farcaster-purple));
+      background: linear-gradient(90deg, var(--farcaster-purple), white, var(--farcaster-purple));
       background-size: 200% 100%;
       animation: gradientFlow 3s linear infinite;
     }
 
     .action-btn.add-app {
-      background: linear-gradient(90deg, var(--farcaster-purple), var(--accent-yellow), var(--farcaster-purple));
+      background: linear-gradient(90deg, var(--farcaster-purple), white, var(--farcaster-purple));
       background-size: 200% 100%;
       animation: gradientFlow 3s linear infinite;
     }
@@ -518,7 +543,7 @@
     }
     
     .draw-btn {
-      background: linear-gradient(90deg, var(--farcaster-purple), var(--accent-yellow), var(--farcaster-purple));
+      background: linear-gradient(90deg, var(--farcaster-purple), white, var(--farcaster-purple));
       background-size: 200% 100%;
       color: var(--text-dark);
       border: none;
@@ -528,7 +553,6 @@
       font-size: 16px;
       cursor: pointer;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 20px rgba(124, 101, 193, 0.4);
       width: 100%;
       max-width: 300px;
       display: flex;
@@ -536,11 +560,11 @@
       align-items: center;
       gap: 8px;
       animation: gradientFlow 3s linear infinite;
+      /* outline: 2px solid red !important; */ /* Удаляем временную обводку */
     }
     
     .draw-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 25px rgba(124, 101, 193, 0.6);
     }
     
     .counter {
@@ -733,7 +757,7 @@
               <stop offset="0%" style="stop-color: var(--farcaster-purple)">
                 <animate attributeName="offset" values="0;1;0" dur="3s" repeatCount="indefinite"/>
               </stop>
-              <stop offset="50%" style="stop-color: var(--accent-yellow)">
+              <stop offset="50%" style="stop-color: white">
                 <animate attributeName="offset" values="0.5;1.5;0.5" dur="3s" repeatCount="indefinite"/>
               </stop>
               <stop offset="100%" style="stop-color: var(--farcaster-purple)">
@@ -741,11 +765,28 @@
               </stop>
             </linearGradient>
           </defs>
-          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M2 17L12 22L22 17" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M2 12L12 17L22 12" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Pixel logo inspired by Reddit Place (4x4 grid with gaps) -->
+          <rect x="0.25" y="0.25" width="5.5" height="5.5" fill="url(#gradient)"/>
+          <rect x="6.25" y="0.25" width="5.5" height="5.5" fill="url(#gradient)"/>
+          <rect x="12.25" y="0.25" width="5.5" height="5.5" fill="url(#gradient)"/>
+          <rect x="18.25" y="0.25" width="5.5" height="5.5" fill="url(#gradient)"/>
+
+          <rect x="0.25" y="6.25" width="5.5" height="5.5" fill="url(#gradient)"/>
+          <rect x="6.25" y="6.25" width="5.5" height="5.5" fill="url(#gradient)"/>
+          <rect x="12.25" y="6.25" width="5.5" height="5.5" fill="url(#gradient)"/>
+          <rect x="18.25" y="6.25" width="5.5" height="5.5" fill="url(#gradient)"/>
+
+          <rect x="0.25" y="12.25" width="5.5" height="5.5" fill="url(#gradient)"/>
+          <rect x="6.25" y="12.25" width="5.5" height="5.5" fill="url(#gradient)"/>
+          <rect x="12.25" y="12.25" width="5.5" height="5.5" fill="url(#gradient)"/>
+          <rect x="18.25" y="12.25" width="5.5" height="5.5" fill="url(#gradient)"/>
+          
+          <rect x="0.25" y="18.25" width="5.5" height="5.5" fill="url(#gradient)"/>
+          <rect x="6.25" y="18.25" width="5.5" height="5.5" fill="url(#gradient)"/>
+          <rect x="12.25" y="18.25" width="5.5" height="5.5" fill="url(#gradient)"/>
+          <rect x="18.25" y="18.25" width="5.5" height="5.5" fill="url(#gradient)"/>
         </svg>
-        <span>Drawcaster</span>
+        <span>Monad Place</span>
       </div>
       
       <div class="user-info">
@@ -764,13 +805,13 @@
       </div>
       
       <div class="controls">
-        <button class="action-btn add-app" title="Добавить мини-приложение">ADD ME!</button>
+        <button class="action-btn add-app" title="Добавить мини-приложение">Add me!</button>
         <div class="zoom-controls">
           <div class="control-btn" id="zoomOut">−</div>
           <div class="control-btn" id="zoomIn">+</div>
           <button class="control-btn music-control" id="musicControl" title="Включить/выключить музыку">♪</button>
         </div>
-        <button class="action-btn share" title="Поделиться">SHARE ME!</button>
+        <button class="action-btn share" title="Поделиться">Share me!</button>
       </div>
       
       <div class="color-palette" id="colorPalette">
