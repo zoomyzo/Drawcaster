@@ -1170,9 +1170,10 @@
       canvas.classList.add('dragging');
     }
     function startDragTouch(e) {
-      if (scale <= 1) return;
       if (e.touches.length === 1) {
         e.preventDefault();
+        if (scale <= 1) return;
+        
         isDragging = true;
         lastX = e.touches[0].clientX;
         lastY = e.touches[0].clientY;
@@ -1194,10 +1195,13 @@
     function dragTouch(e) {
       if (!isDragging || e.touches.length !== 1 || scale <= 1) return;
       e.preventDefault();
-      const deltaX = e.touches[0].clientX - lastX;
-      const deltaY = e.touches[0].clientY - lastY;
-      lastX = e.touches[0].clientX;
-      lastY = e.touches[0].clientY;
+      
+      const touch = e.touches[0];
+      const deltaX = touch.clientX - lastX;
+      const deltaY = touch.clientY - lastY;
+      lastX = touch.clientX;
+      lastY = touch.clientY;
+      
       offsetX += deltaX / scale;
       offsetY += deltaY / scale;
       updateCanvasTransform();
@@ -1232,7 +1236,29 @@
     // Выбор пикселя для касания
     function selectPixelTouch(e) {
       if (e.touches.length === 1 && !isDragging) {
-        selectPixel(e.touches[0]);
+        e.preventDefault(); // Предотвращаем стандартное поведение
+        
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        
+        // Получаем координаты касания относительно canvas
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        
+        // Учитываем масштаб и смещение при расчете координат
+        const canvasX = ((touch.clientX - rect.left - offsetX) / scale) * scaleX;
+        const canvasY = ((touch.clientY - rect.top - offsetY) / scale) * scaleY;
+
+        const pixelSize = boardSize / GRID_SIZE;
+        const yIndexRaw = canvasY / pixelSize;
+        const y = Math.min(GRID_SIZE - 1 - Math.floor(yIndexRaw), GRID_SIZE - 1);
+        const x = Math.min(Math.floor(canvasX / pixelSize), GRID_SIZE - 1);
+
+        if (x >= 0 && x < GRID_SIZE && y >= 0 && y < GRID_SIZE) {
+          selectedPixel = {x, y};
+          document.getElementById('pixelCoords').textContent = `(${x}, ${y})`;
+          drawGrid(ctx);
+        }
       }
     }
 
